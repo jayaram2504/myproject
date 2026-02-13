@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Reg</title>
+   <style>
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 3px;
+  }
+  input {
+    width: 90%;
+  }
+  button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+  }
+  .box{
+            width:250px;
+            height:auto;
+            background-color:lightgreen;
+            padding:10px;
+            border: 3px solid red;
+        }
+    </style>
+</head>
+
+<body bgcolor="yellow">
+
+<center>
+<div class="box">
+    <h3>Student Registration</h3>
+
+    <!-- ADD -->
+    <form action="/register" method="POST">
+    <label>Name:</label>
+    <input type="text" name="name" placeholder="Enter your name"><br><br>
+
+    <label>Department:</label>
+    <input type="text" name="dept" placeholder="Enter your dept"><br><br>
+
+    <button type="submit">Add</button>
+</form>
+
+<br>
+
+    <!-- VIEW -->
+    <form action="/view" method="get">
+        <button type="submit" >View Students</button>
+    </form>
+
+    <br>
+
+</div>
+</center>
+
+</body>
+</html>
