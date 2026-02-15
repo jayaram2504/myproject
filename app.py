@@ -1,39 +1,39 @@
-from flask import Flask, render_template, request, redirect, url_for
-import mysql.connector
+from flask import Flask, render_template, request
+import psycopg2
+import os
 
 app = Flask(__name__)
 
-# Database connection function
+# PostgreSQL connection using Render DATABASE_URL
 def get_db():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="2006",
-        database="testdb"
-    )
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+
+    con = psycopg2.connect(DATABASE_URL)
+    return con
+
 
 # Home page
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 # ADD student
 @app.route('/register', methods=['POST'])
 def add():
-    
-    print(request.form) 
-    
     name = request.form.get('name')
     dept = request.form.get('dept')
 
-
     con = get_db()
     cur = con.cursor()
+
     cur.execute(
         "INSERT INTO users (name, dept) VALUES (%s, %s)",
         (name, dept)
     )
+
     con.commit()
+    cur.close()
     con.close()
 
     return """
@@ -43,13 +43,17 @@ def add():
     </script>
     """
 
+
 # VIEW students
 @app.route('/view')
 def view():
     con = get_db()
     cur = con.cursor()
+
     cur.execute("SELECT * FROM users")
     data = cur.fetchall()
+
+    cur.close()
     con.close()
 
     html = """
@@ -89,13 +93,17 @@ def view():
 
     return html
 
+
 # DELETE student
 @app.route('/delete/<int:id>')
 def delete(id):
     con = get_db()
     cur = con.cursor()
+
     cur.execute("DELETE FROM users WHERE id=%s", (id,))
+
     con.commit()
+    cur.close()
     con.close()
 
     return """
@@ -104,6 +112,7 @@ def delete(id):
         window.location.href='/view';
     </script>
     """
+
 
 if __name__ == '__main__':
     app.run(debug=True)
